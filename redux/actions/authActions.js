@@ -2,6 +2,9 @@ import React,{useState} from "react"
 import { auth } from "../../firebase/config.js";
 import firebase from 'firebase';
 import { Alert } from 'react-native';
+import { LogBox } from 'react-native';
+
+LogBox.ignoreLogs(['Setting a timer'])
 
 
  
@@ -10,18 +13,19 @@ import { Alert } from 'react-native';
         
          return async (dispatch) =>
          {
-              const [check, setCheck] = useState(false)
+            //   const [check, setCheck] = useState(false)
             try{
-             setCheck(true)
+            //  setCheck(true)
                 const user = await auth.createUserWithEmailAndPassword(email, password)
                 dispatch({
                     type: "LOGGED_IN",
                     payload:user
                 })
         } catch (error) {
-            dispatch(registerError(error.message))
-             } finally { setCheck(false) }
-             return check
+            Alert.alert('there is something wrong!!',error.message)
+            }
+            // finally { setCheck(false) }
+            //  return check
          }
          
     }
@@ -81,6 +85,13 @@ export function registerError(error)
 {
     return {
         type: "REGISTER_ERROR",
+        payload: error
+    }
+}
+export function loginError(error)
+{
+    return {
+        type: "LOGGIN_ERROR",
         payload: error
     }
 }
