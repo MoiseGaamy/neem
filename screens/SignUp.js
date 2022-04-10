@@ -2,15 +2,14 @@ import { StyleSheet, Text, View, TouchableOpacity, TextInput,Keyboard, ScrollVie
 import React,{useState} from 'react'
 import { Ionicons } from '@expo/vector-icons';
 import TypeWriter from "react-native-typewriter";
-import userAuth from '../firebase/userAuth.js';
 import { connect } from "react-redux"
-import { signUp, registerError} from '../redux/actions/authActions.js';
+import { signUp} from '../redux/actions/authActions.js';
 
 
 
-const SignUp = ({ navigation,auth ,registerError,signUp}) =>
+const SignUp = ({ navigation,signUp}) =>
 {
-    const {check} = signUp
+    // const {check} = signUp
     const [email,setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [info,setInfo]=useState(null)
@@ -27,12 +26,12 @@ const SignUp = ({ navigation,auth ,registerError,signUp}) =>
     {
         if (!email || !password)
         {
-            registerError('you have forgotten one field')
-        } else
+            Alert.alert('they field are not to be empty.')
+        }
+        else
         {
             signUp(email, password);
             emptyInput()
-             navigation.navigate('drawer')
         }
     }
     const handleGoogle = () =>
@@ -46,7 +45,7 @@ const SignUp = ({ navigation,auth ,registerError,signUp}) =>
                 <ScrollView style={styles.container} contentContainerStyle={{flexGrow:1}}>
                     <View style={styles.firstCon}>
                         <View style={{justifyContent:"center",alignItems:"center"}}>
-                          <TypeWriter typing={1} maxDelay={400} style={{fontSize:22,lineHeight:30,color:"#cfeef7",fontFamily:"roboSe"}}>Welcome To Neem Money</TypeWriter>
+                          <TypeWriter typing={1} maxDelay={400} style={{fontSize:22,lineHeight:30,color:"#cfeef7",fontFamily:"roboto"}}>Welcome To Neem Money</TypeWriter>
                           <Text style={{ fontSize: 16, color: "#cfeef7" }}>Spend Smater Save wisely</Text>
                         </View>
                         {/* <Image style={{width:"50%",height:"40%"}} source={require("../assets/nim.png")}/> */}
@@ -64,10 +63,9 @@ const SignUp = ({ navigation,auth ,registerError,signUp}) =>
                            <ScrollView contentContainerStyle={{flexGrow:1}}>
                                 <View style={styles.signContainer}>
                                 <Text style={{ fontFamily: 'inconsolata', fontSize: 17 }}>signup with your email address</Text>
-                                {auth.error.register && <Text style={{ color: "red" }}>{auth.error.register}</Text>}
                                 <TouchableOpacity style={{ backgroundColor: "#cfeef7", flexDirection: "row", justifyContent: "flex-start", width: "90%", height: "20%", borderRadius: 15, alignItems: "center" }}><TextInput placeholder='Email' value={email} onChangeText={(email)=>setEmail(email)}/></TouchableOpacity>
                                 <TouchableOpacity style={{ backgroundColor: "#cfeef7", flexDirection: "row", justifyContent: "flex-start", width: "90%", height: "20%", borderRadius: 15, alignItems: "center" }}><TextInput placeholder='Password' value={password} onChangeText={(password) => setPassword(password)} secureTextEntry={true}/></TouchableOpacity>
-                                     {<TouchableOpacity onPress={handleSignUp} style={{backgroundColor:"#14A5A1",flexDirection:"row",justifyContent:"center",width:"90%",height:"20%",borderRadius:15,alignItems:"center"}}>{check ? <ActivityIndicator color='blue'/>:<Text style={{color:"#cfeef7",fontSize:20,fontFamily:'inconsolata'}}>Sign Up</Text>}</TouchableOpacity>}
+                                     <TouchableOpacity onPress={handleSignUp} style={{backgroundColor:"#14A5A1",flexDirection:"row",justifyContent:"center",width:"90%",height:"20%",borderRadius:15,alignItems:"center"}}><Text style={{color:"#cfeef7",fontSize:20,fontFamily:'inconsolata'}}>Sign Up</Text></TouchableOpacity>
                                 <View style={{flexDirection:"row",alignItems:"center"}}><Text style={{flex:0.5,justifyContent:"flex-end",fontFamily:'inconsolata',fontSize:15}}>Already Have Account?</Text><TouchableOpacity style={{flex:0.4}} onPress={()=> navigation.navigate('signin')}><Text style={{color:"#14A5A1",fontSize:15,fontFamily:'inconsolata'}}>Sign In</Text></TouchableOpacity></View>
                             </View>
                            </ScrollView>
@@ -78,12 +76,8 @@ const SignUp = ({ navigation,auth ,registerError,signUp}) =>
   )
 }
 
-const mapStateToProp = (state) =>
-{
-    return {auth:state}
-}
 
-export default connect(mapStateToProp,{signUp,registerError})(SignUp)
+export default connect(null,{signUp})(SignUp)
 
 const styles = StyleSheet.create({
     container: {
