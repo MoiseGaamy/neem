@@ -11,6 +11,8 @@ const Plan = () =>
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
+  const [amount,setAmount] = useState()
+  const [cont,setCont] = useState()
 
 
   const [selectedLanguage, setSelectedLanguage] = useState();
@@ -40,24 +42,26 @@ const Plan = () =>
         <View style={{paddingHorizontal:50,flex:0.7}}>
             <View style={{justifyContent:"space-evenly",flex:0.3}}>
           <Text style={{fontSize:18,fontFamily:'inconsolata'}}>Amount to Save</Text>
-          <Text style={{ fontSize: 22,fontFamily:'robo' }}>$37.500</Text>
+          <Text style={{ fontSize: 22,fontFamily:'robo' }}>{Math.floor(amount)} Ghs</Text>
            <Slider
           style={{width: 500, height: 40}}
           minimumValue={0}
           maximumValue={800.000}
+          onValueChange={(value)=>setAmount(Math.floor(value))}
           minimumTrackTintColor="#092235"
           maximumTrackTintColor="#000000"
         />
          </View>
         <View style={{justifyContent:"space-evenly",flex:0.3}}>
           <Text style={{fontSize:18,fontFamily:'inconsolata'}}>Contribution</Text>
-          <Text style={{ fontSize: 22 ,fontFamily:'robo'}}>$1.500</Text>
+          <Text style={{ fontSize: 22 ,fontFamily:'robo'}}>{Math.floor(cont)} Ghs</Text>
            <Slider
           style={{width: 500, height: 40}}
           minimumValue={0}
           maximumValue={800.000}
+          onValueChange={(value)=>setCont(Math.floor(value))}
           minimumTrackTintColor="#092235"
-          maximumTrackTintColor="#000000"
+          maximumTrackTintColor="#000000"   
         />
           </View>
           <View>
@@ -102,7 +106,7 @@ const Plan = () =>
   )
 }
 
-export default connect({},{}) (Plan)
+export default connect(null,{}) (Plan)
 
 const styles = StyleSheet.create({
     container: {
