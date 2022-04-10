@@ -2,6 +2,10 @@ import React,{useState} from "react"
 import { auth, fireDB } from './config.js';
 import firebase from 'firebase';
 import { Alert } from 'react-native';
+import { LogBox } from 'react-native';
+
+LogBox.ignoreLogs(['Setting a timer']);
+
 
 
 
