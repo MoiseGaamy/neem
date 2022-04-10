@@ -5,18 +5,19 @@ import Profile from '../Profile.js';
 import Setting from '../Setting.js';
 import HomeScreen from '../HomeScreen.js';
 import userAuth from '../../firebase/userAuth.js';
+import { signOut } from '../../redux/actions/authActions.js';
+import { connect } from 'react-redux';
   
 
 const Drawer = createDrawerNavigator()
 
-const MyDrawer = ({navigation}) =>
+const MyDrawer = ({navigation,signOut}) =>
 {
-  const { signOut } = userAuth()
+  // const { signOut } = userAuth()
   
   const handleSignOut = () =>
   {
     signOut()
-     navigation.navigate('splash')
   }
   return (
       <Drawer.Navigator initialRouteName='homeScreen' drawerContent={(props)=>{
@@ -34,5 +35,5 @@ const MyDrawer = ({navigation}) =>
   )
 }
 
-export default MyDrawer
+export default connect(null,{signOut})(MyDrawer)
 
