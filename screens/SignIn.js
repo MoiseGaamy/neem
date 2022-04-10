@@ -2,28 +2,19 @@ import { StyleSheet, Text, View, TouchableOpacity,TextInput, KeyboardAvoidingVie
 import { Ionicons } from '@expo/vector-icons';
 import TypeWriter from "react-native-typewriter";
 import React,{useState} from 'react'
-import userAuth from '../firebase/userAuth.js';
-import {connect} from "react-redux"
+import { connect } from "react-redux"
+import { signIn} from '../redux/actions/authActions.js';
 
 
-const SignIn = ({ navigation }) =>
+const SignIn = ({ signIn}) =>
 {   
-    const { signIn } = userAuth()
+    
     const [email,setEmail]= useState('')
     const [password, setPassword] = useState('')
     const [loading, setLoading] = useState(false);
     
     const widowWith = useWindowDimensions().height
     const padding = widowWith
-
-    const startLoading = () =>
-    {
-        setLoading(true);
-        setTimeout(() =>
-        {
-            setLoading(false)
-        },3000)
-    }
 
     const emptyInput = () =>
     {
@@ -41,7 +32,7 @@ const SignIn = ({ navigation }) =>
             signIn(email, password)
             emptyInput()
             // setLoading()
-            navigation.navigate('drawer')
+            // navigation.navigate('drawer')
         }
     }
     return (
@@ -49,7 +40,7 @@ const SignIn = ({ navigation }) =>
               <View style={styles.container}>
         <View style={{flex:0.2}}>
             <View style={{justifyContent:"center",alignItems:"center"}}>
-                          <TypeWriter typing={1} maxDelay={400} style={{fontSize:22,lineHeight:30,color:"#cfeef7",fontFamily:"roboSe"}}>Welcome To Neem Money</TypeWriter>
+                          <TypeWriter typing={1} maxDelay={400} style={{fontSize:22,lineHeight:30,color:"#cfeef7",fontFamily:"roboto"}}>Welcome To Neem Money</TypeWriter>
                           <Text style={{ fontSize: 16, color: "#cfeef7" }}>Spend Smater Save wisely</Text>
             </View>
         </View>
@@ -63,7 +54,7 @@ const SignIn = ({ navigation }) =>
                    </View>
                   </View> */}
                   <View style={styles.signContainer}>
-                        <Text>signIn with your email address</Text>     
+                        <Text>signIn with your email address</Text>  
                         <TouchableOpacity style={{ backgroundColor: "#cfeef7", flexDirection: "row", justifyContent: "flex-start", width: '90%', borderRadius: 15, alignItems: "center", height: '20%' }}><TextInput placeholder='Email' value={email} onChangeText={(email)=>setEmail(email)}/></TouchableOpacity>
                         <TouchableOpacity style={{ backgroundColor: "#cfeef7", flexDirection: "row", justifyContent: "flex-start", width: '90%', borderRadius: 15, alignItems: "center", height: '20%' }}><TextInput placeholder='Password' value={password} onChangeText={(password) => setPassword(password)} secureTextEntry={true}/></TouchableOpacity>
                         <TouchableOpacity onPress={handleSignIn} style={{ backgroundColor: "#14A5A1", flexDirection: "row", justifyContent: "center", width: '90%', borderRadius: 15, alignItems: "center", height: '20%' }}><Text style={{color:"#cfeef7",fontSize:18}}>Sign In</Text></TouchableOpacity>   
@@ -76,7 +67,9 @@ const SignIn = ({ navigation }) =>
   )
 }
 
-export default connect({},{})(SignIn)
+
+
+export default connect(null,{signIn})(SignIn)
 
 const styles = StyleSheet.create({
     container: {
