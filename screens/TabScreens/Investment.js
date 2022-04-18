@@ -31,7 +31,7 @@ const Investment = ({navigation}) =>
   return (
     <View style={styles.container}>
       <View style={styles.feed}>
-        <Text>Investment Feed</Text>
+        <Text style={{fontSize:19,fontFamily:"inconsolata"}}>Investment Feed</Text>
       </View>
       <View style={styles.feedContainer}>
         <FlatList data={data} keyExtractor={(item) => item.id} renderItem={({ item }) => <TouchableOpacity onPress={() => navigation.navigate('feed', { item })}><Feed item={item}/></TouchableOpacity> }/>
@@ -55,5 +55,6 @@ const styles = StyleSheet.create({
   },
   feedContainer: {
     flex: 1,
+    backgroundColor:"#14A5A1",opacity:0.8
   }
 })
