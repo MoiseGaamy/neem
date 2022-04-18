@@ -3,10 +3,10 @@ import React from 'react'
 
 const Feed = ({item}) =>
 {
-    const { image, headLine, para, date:newDate } = item;
+    const { image, headLine, para, date:newDate ,id} = item;
     const date = new Date().toDateString()
   return (
-    <View style={styles.container}>
+    <View key={id} style={styles.container}>
           <View style={styles.detailcontainer}>
               <View>
                   <Image style={{width:370,height:150}} source={image}/>
@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
         padding: 10,
         borderWidth: 1,
         borderColor: "#fff",
-        backgroundColor:"#789395",
+        backgroundColor:"#cfeef7",
         borderRadius: 8,
         justifyContent:"space-evenly"
         // height:"80%"
