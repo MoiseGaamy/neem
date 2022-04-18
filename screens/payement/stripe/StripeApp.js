@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { CardField,useConfirmPayment } from '@stripe/stripe-react-native'
 
 
-const API_URL = "http://10.0.2.2:5000"
+const API_URL = "http://localhost:5000"
 
 const StripeApp = () =>
 {
