@@ -2,9 +2,9 @@ import React,{useState} from "react"
 import { auth } from "../../firebase/config.js";
 import firebase from 'firebase';
 import { Alert } from 'react-native';
-import { LogBox } from 'react-native';
+// import { LogBox } from 'react-native';
 
-LogBox.ignoreLogs(['Setting a timer'])
+// LogBox.ignoreLogs(['Setting a timer'])
 
 
  
@@ -16,11 +16,11 @@ LogBox.ignoreLogs(['Setting a timer'])
             //   const [check, setCheck] = useState(false)
             try{
             //  setCheck(true)
-                const user = await auth.createUserWithEmailAndPassword(email, password)
-                dispatch({
-                    type: "LOGGED_IN",
-                    payload:user
-                })
+                 await auth.createUserWithEmailAndPassword(email, password)
+                // dispatch({
+                //     type: "LOGGED_IN",
+                //     payload:user
+                // })
         } catch (error) {
             Alert.alert('there is something wrong!!',error.message)
             }
@@ -36,11 +36,11 @@ LogBox.ignoreLogs(['Setting a timer'])
         return async (dispatch) =>
         {
             try {
-                const user = await auth.signInWithEmailAndPassword(email, password)
-                dispatch({
-                    type: "LOGGED_IN",
-                    payload:user
-                })
+                 await auth.signInWithEmailAndPassword(email, password)
+                // dispatch({
+                //     type: "LOGGED_IN",
+                //     payload:user
+                // })
          } catch (error) {
              Alert.alert('there is something wrong!!',error.message)
          }   
@@ -70,31 +70,31 @@ LogBox.ignoreLogs(['Setting a timer'])
         {
             try {
                 await auth.signOut()
-                dispatch({
-                    type: "LOGGED_OUT"
-                })
+                // dispatch({
+                //     type: "LOGGED_OUT"
+                // })
             } catch (error) {
-            dispatch(registerError(error.message))
+            Alert.alert(error.message)
             }   
         }
        
 }
     
 
-export function registerError(error)
-{
-    return {
-        type: "REGISTER_ERROR",
-        payload: error
-    }
-}
-export function loginError(error)
-{
-    return {
-        type: "LOGGIN_ERROR",
-        payload: error
-    }
-}
+// export function registerError(error)
+// {
+//     return {
+//         type: "REGISTER_ERROR",
+//         payload: error
+//     }
+// }
+// export function loginError(error)
+// {
+//     return {
+//         type: "LOGGIN_ERROR",
+//         payload: error
+//     }
+// }
 
 
 
