@@ -1,22 +1,47 @@
-import { StyleSheet, Text, View,useWindowDimensions,KeyboardAvoidingView } from 'react-native'
-import React,{useRef} from 'react'
+import { StyleSheet,Button, Text, View,useWindowDimensions,KeyboardAvoidingView } from 'react-native'
+import React,{useRef, useState} from 'react'
 import { TextInput, TouchableOpacity } from 'react-native'
+import * as Notifications from 'expo-notifications';
 import { Paystack, paystackProps } from 'react-native-paystack-webview';
 import StripeApp from './stripe/StripeApp.js';
 import { StripeProvider } from '@stripe/stripe-react-native';
 
+
+Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: false,
+  }),
+    });
+
 const ProceedPayment = ({navigation}) =>
 {
+    const handleNotification = () =>
+    {
+    Notifications.scheduleNotificationAsync({
+    content: {
+      title: "hi 😎there",
+      body: 'it is time for your payment',
+    },
+    trigger: { seconds: 5 },
+  });
+}
+
      const widowWith = useWindowDimensions().height
     const padding = widowWith
 
-    const paystackWebViewRef = useRef(paystackProps.PayStackRef); 
+     const paystackWebViewRef = useRef(paystackProps.PayStackRef); 
     return (
      <KeyboardAvoidingView behavior={`${padding}`} style={{flex:1,minHeight:widowWith}}>
             
     <View style={styles.container}>
           <View style={{flex:0.5,backgroundColor:"#fff",borderRadius:30,justifyContent:'space-around',alignItems:"center"}}>
                   <Text style={{fontSize:19,fontFamily:'robo',textAlign:"center",}}>Payment</Text>
+                    <Button
+                        title="Press to schedule a notification"
+                        onPress={handleNotification}
+      />
               <View style={{flex:0.5,justifyContent:'space-evenly'}}>
                     <View style={{justifyContent:"space-around"}}>
                         <Text style={{fontFamily:'robo'}}>Email</Text>
@@ -34,8 +59,8 @@ const ProceedPayment = ({navigation}) =>
                         activityIndicatorColor="green"
                         onCancel={(e) =>
                         {
-                         console.log(e)
-                         navigation.navigate('drawer') 
+                            console.log(e)
+                            //  navigation.navigate('drawer') 
                         }}
                         onSuccess={(res) =>
                         {
