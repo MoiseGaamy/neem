@@ -9,7 +9,10 @@ import { store,persistor } from './redux/store.js';
 import AppContainer from './navigations/navigation.js';
 import useFonts from "./hooks/useFonts.js"
 import { PersistGate } from 'redux-persist/integration/react';
+import { LogBox } from 'react-native';
 
+
+LogBox.ignoreLogs(['Remote debugger']);
 
 export default function App()
 {
@@ -42,9 +45,7 @@ export default function App()
    
   return (
     <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
         <AppContainer />
-      </PersistGate>
       </Provider>
       
    
