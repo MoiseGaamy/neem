@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
+import * as Progress from 'react-native-progress';
 
 const Goal = ({ item }) =>
 {
@@ -20,8 +21,9 @@ const Goal = ({ item }) =>
          </View>
          <View style={{flex:1,paddingLeft:30,height:50}}>
             
-        <View style={{backgroundColor:"#533E85",width:"100%",height:"15%",borderRadius:7,justifyContent:"center"}}>
-                 <View style={{backgroundColor:"#E6D5B8",width:"60%",height:"20%",borderRadius:5}}></View>
+        <View style={{backgroundColor:"#203239",width:"100%",height:"15%",borderRadius:7,justifyContent:"center"}}>
+                      <Progress.Bar progress={0.8} width={200} />
+                      {/* <View style={{backgroundColor:"#E6D5B8",width:"60%",height:"20%",borderRadius:5}}></View> */}
              </View>
              <View style={{flex:1,flexDirection:"row",justifyContent:"space-between",alignItems:"center"}}>
                       <Text>{`$${startPrice}`}</Text>
