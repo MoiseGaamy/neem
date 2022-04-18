@@ -19,21 +19,23 @@ import { auth } from '../firebase/config.js';
 import useFonts from "../hooks/useFonts.js"
 import ProceedPayment from '../screens/payement/ProceedPayment.js';
 import {connect} from "react-redux"
+import Achieved from '../screens/Achieved.js';
+import  Modal  from '../screens/Modal.js';
 
 
- function AppContainer({auth})
+ function AppContainer()
 {
-  // const [currentUser,setCurrentUser]= useState(null)
+  const [currentUser,setCurrentUser]= useState(null)
 
-  // useEffect(() =>
-  // {
-  //   const subscriber = auth.onAuthStateChanged((user) =>
-  //   {
-  //     if (user && user.uid) setCurrentUser(user)
-  //     else setCurrentUser(null)
-  //   })
-  //   return subscriber
-  // },[])
+  useEffect(() =>
+  {
+    const subscriber = auth.onAuthStateChanged((user) =>
+    {
+      if (user && user.uid) setCurrentUser(user)
+      else setCurrentUser(null)
+    })
+    return subscriber
+  },[])
   
   
   const Stack = createNativeStackNavigator()
@@ -41,12 +43,14 @@ import {connect} from "react-redux"
   return (
       <NavigationContainer>
           <Stack.Navigator initialRouteName="splash">
-        {auth.login ? <>
+        {currentUser ? <>
           <Stack.Screen name="drawer" component={MyDrawer} options={{headerShown:false}}/>
           <Stack.Screen name="feed" component={Detail} />
           <Stack.Screen name="Proceed" component={ProceedPayment}  options={{headerShown:false}}/>
           <Stack.Screen name="Add Unlinked Account" component={AddUnlinked} />
             <Stack.Screen name="Add UnlinkedAccount" component={Success} />
+          <Stack.Screen name="achieved" component={Achieved} options={{headerTitleAlign:"center"}}/>
+          <Stack.Screen name="modal" component={Modal} options={{headerTitle:'Achievements',headerTitleAlign:"center"}}/>
           </> : <>
           <Stack.Screen name="splash" component={LogoScreen} options={{ headerShown:false}}/>
           <Stack.Screen name="signup" component={SignUp} options={{headerShown:false}}/>
@@ -58,11 +62,8 @@ import {connect} from "react-redux"
   );
 }
 
-const mapStateToProps = (state) =>
-{
-  return {auth:state}
-}
-export default connect(mapStateToProps)(AppContainer)
+
+export default AppContainer
 
 const styles = StyleSheet.create({
   container: {
