@@ -1,19 +1,28 @@
-import { createStore,applyMiddleware } from "redux";
+import { createStore,applyMiddleware,combineReducers } from "redux";
 import authReducer from '../redux/reducers/authReducer.js'
+import goalReducer from "./reducers/goalReducer.js";
 import thunk from "redux-thunk";
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import { persistStore, persistReducer } from "redux-persist"
+// import AsyncStorage from '@react-native-async-storage/async-storage';
+// import { persistStore, persistReducer } from "redux-persist"
+
+// import { LogBox } from 'react-native';
 
 
-const persistConfig = {
-    key: 'root',
-    storage: AsyncStorage
-}
+// LogBox.ignoreLogs(['Warning: Async Storage has been extracted from react-native core']);
 
-const persistedReducer = persistReducer(persistConfig,authReducer)
+// const persistConfig = {
+//     key: 'root',
+//     storage: AsyncStorage
+// }
 
-let store = createStore(persistedReducer, applyMiddleware(thunk))
+const reducers = combineReducers({
+    goals: goalReducer
+})
 
-let persistor = persistStore(store)
+// const persistedReducer = persistReducer(persistConfig,reducers)
 
-export { store ,persistor};
+let store = createStore(reducers, applyMiddleware(thunk))
+
+// let persistor = persistStore(store)
+
+export { store };
