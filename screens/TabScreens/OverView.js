@@ -1,101 +1,148 @@
-import { StyleSheet, Text, View,SafeAreaView,TouchableOpacity,Dimensions } from 'react-native'
-import React from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+  Image,
+  TouchableOpacity,
+} from "react-native";
+import React from "react";
+import {
+  Ionicons,
+  FontAwesome5,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
+import Goal from "../Goal.js";
+import { connect } from "react-redux";
 import { DrawerActions } from "@react-navigation/native";
-import { Ionicons, EvilIcons, FontAwesome5 } from '@expo/vector-icons';
-import { StatusBar } from 'expo-status-bar';
-import { LineChart } from 'react-native-chart-kit';
 
-const OverView = ({ navigation }) =>
-{
-  const screenWidth = Dimensions.get('window').width;
-  const data = {
-  labels: ['January', 'February', 'March', 'April', 'May', 'June'],
-  datasets: [{
-    data: [ 20, 45, 28, 80, 99, 43 ]
-  }]
-}
+const Progress = ({ goals, navigation }) => {
+  console.log(goals);
+
+  const data = [
+    {
+      id: 1,
+      icon: <Ionicons name="home-outline" size={24} color="black" />,
+      itemName: "newHome",
+      monthLeft: "9 months left",
+      startPrice: 15700,
+      endPrice: 37500,
+    },
+    {
+      id: 2,
+      icon: <FontAwesome5 name="plane-departure" size={24} color="black" />,
+      itemName: "trip to dubai",
+      monthLeft: "5 months left",
+      startPrice: 8500,
+      endPrice: 10000,
+    },
+    {
+      id: 3,
+      icon: (
+        <MaterialCommunityIcons name="cash-refund" size={24} color="black" />
+      ),
+      itemName: "Debt",
+      monthLeft: "7 months left",
+      startPrice: 40000,
+      endPrice: 80000,
+    },
+  ];
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.headContainer}>
-        <View>
-          <Text style={{fontFamily:'inconsolata',fontSize:16}}>$Gaamy</Text>
-          <Text style={{fontFamily:'inconsolata',fontSize:16}}>Personal Account</Text>
+    <View style={styles.container}>
+      <View style={styles.firstContainer}>
+        <View style={styles.headContainer}>
+          <View>
+            <Text style={{ fontFamily: "inconsolata", fontSize: 16 }}>
+              $Gaamy
+            </Text>
+            <Text style={{ fontFamily: "inconsolata", fontSize: 16 }}>
+              Personal Account
+            </Text>
+          </View>
+          <View
+            style={{
+              backgroundColor: "#FFBD01",
+              width: 100,
+              height: 30,
+              borderRadius: 15,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <TouchableOpacity onPress={() => navigation.navigate("Proceed")}>
+              <Text style={{ fontFamily: "inconsolata", fontSize: 17 }}>
+                Payment
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <TouchableOpacity
+            onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
+          >
+            <Ionicons name="menu-outline" size={24} color="black" />
+          </TouchableOpacity>
         </View>
-          <View style={{backgroundColor:"#FFBD01",width:100,height:30,borderRadius:15,justifyContent:"center",alignItems:"center"}}><TouchableOpacity onPress={()=> navigation.navigate('Proceed')}><Text style={{fontFamily:'inconsolata',fontSize:17}}>Payment</Text></TouchableOpacity></View>
-         <TouchableOpacity onPress={()=> navigation.dispatch(DrawerActions.openDrawer())}><Ionicons name="menu-outline" size={24} color="black" /></TouchableOpacity> 
-        </View>
-      <View style={styles.cardContainer}>
-        {/* <View style={{flex:1,paddingHorizontal: 35}}>
-             <View style={{backgroundColor:"#092235",flex:0.7,borderTopRightRadius:15,borderTopLeftRadius:15}}>
-            <View style={{justifyContent:"space-evenly",flex:1,paddingHorizontal:20}}>
-               <View>
-              <Text style={{color:"#999"}}>Active Balance</Text>
-              <View style={{flexDirection:"row"}}>
-                <Text style={{fontSize:20,color:"#fff"}}>RP 100.123.000</Text>
-                <EvilIcons name="eye" size={24} color="#999" />
-              </View>
-            </View>
-            
-            <View style={{justifyContent:"space-evenly",flex:0.5}}>
-               <FontAwesome5 name="rockrms" size={24} color="#999" />
-            <Text style={{fontSize:20,color:"#fff"}}>5342 4242 6789 1024</Text>
-            <Text style={{color:"#999"}}>10/25</Text>
-            </View>
-           </View>
-        </View>
-        <View style={{backgroundColor:"#092235",flex:0.2,borderBottomRightRadius:15,borderBottomLeftRadius:15,borderTopWidth:0.5,borderTopColor:"#999"}}>
-          
-        </View>
-        </View> */}
-        <LineChart data={data}
-          width={screenWidth}
-          height={400}
-          chartConfig={styles.chartConfig}
-          bezier />
-       
       </View>
-      <View style={styles.addOns}>
-        <TouchableOpacity onPress={()=> navigation.navigate('plan')} style={styles.btn}><Text style={{fontSize:20,color:'#EEEEEE',fontFamily:'inconsolata'}}>Pick A Plan</Text></TouchableOpacity>
-        <TouchableOpacity onPress={()=> navigation.navigate('progress')} style={styles.btn}><Text style={{fontSize:20,color:'#EEEEEE',fontFamily:'inconsolata'}}>Check out Progress</Text></TouchableOpacity>
-        <TouchableOpacity onPress={()=> navigation.navigate('investment')} style={styles.btn}><Text style={{fontSize:20,color:'#EEEEEE',fontFamily:'inconsolata'}}>Check out Investment</Text></TouchableOpacity>
+      <View style={styles.secondContainer}>
+        <Text style={{ flex: 0.3 }}>Your goals</Text>
+        <View
+          style={{
+            flex: 0.3,
+            flexDirection: "row",
+            justifyContent: "space-around",
+          }}
+        >
+          <Text>All</Text>
+          <TouchableOpacity onPress={() => navigation.navigate("achieved")}>
+            <Text>Achieved</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-      <StatusBar style='auto' />
-    </SafeAreaView>
-  )
-}
+      <View style={styles.thirdContainer}>
+        <FlatList
+          data={data}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => <Goal item={item} />}
+        />
+      </View>
+    </View>
+  );
+};
 
-export default OverView
+const mapStateToProps = (state) => {
+  return {
+    goals: state.goals.goals,
+  };
+};
+
+export default connect(mapStateToProps)(Progress);
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
+  container: {
+    flex: 1,
+    backgroundColor: "#cfeef7",
   },
-  headContainer: {
-    flex:0.2,
+  firstContainer: {
+    flex: 0.2,
+    // backgroundColor: "yellow",
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+  },
+  secondContainer: {
+    flex: 0.1,
+    // backgroundColor: "pink",
     justifyContent: "space-around",
     flexDirection: "row",
-    alignItems:"center"
-  },
-  cardContainer: {
-    flex: 0.5,
-  },
-  addOns: {
-    flex: 0.3,
-    justifyContent: "space-evenly",
-    alignItems:"center"
-  },
-  btn: {
-    width: 370,
-    height: 60,
-    backgroundColor: "#14A5A1",
-    borderRadius: 20,
     alignItems: "center",
-    justifyContent:"center"
   },
-  chartConfig:{
-      backgroundColor: '#14A5A1',
-      // backgroundGradientFrom: '#fb8c00',
-      // backgroundGradientTo: '#ffa726',
-      color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-}
-})
+  thirdContainer: {
+    flex: 0.7,
+    // backgroundColor:"grey"
+  },
+  headContainer: {
+    flex: 0.8,
+    justifyContent: "space-between",
+    flexDirection: "row",
+    alignItems: "flex-end",
+  },
+});
