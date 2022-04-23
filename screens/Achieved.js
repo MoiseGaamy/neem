@@ -12,7 +12,8 @@ const Achieved = ({navigation}) =>
             id: 1,
             icon: <MaterialIcons name="done" size={50} color="#00C897" />,
             name: "Trip to Dubai",
-            text:"Goal Completed"
+            text1:"Goal Completed",
+            text:" withdraw money"
             
         },
         // {
