@@ -3,7 +3,7 @@ import React from 'react'
 
 const GoalAchieved = ({ item }) =>
 {
-    const { icon, name, text } = item;
+    const { icon, name, text,text1 } = item;
   return (
     <View style={styles.container}>
         <View style={{flex:1,backgroundColor:"#cfeef7",flexDirection: "row",width:380,height:130,borderRadius:20,margin:10}}>
@@ -14,7 +14,8 @@ const GoalAchieved = ({ item }) =>
         </View>
             <View style={{ flex: 0.7,justifyContent:"center", alignItems:"center" }}>
                 <Text style={{ fontSize: 18 }}>{name}</Text>
-                <Text style={{ fontSize: 18, fontFamily: "inconsolata" }}>{text}</Text>
+                <Text style={{ fontSize: 18, fontFamily: "inconsolata" }}>{text1}</Text>
+                <Text style={{ fontSize: 20, fontFamily: "inconsolata",color:"#005555" }}>{text}</Text>
             </View>
             
         </View>
