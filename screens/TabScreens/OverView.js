@@ -6,7 +6,7 @@ import {
   Image,
   TouchableOpacity,
 } from "react-native";
-import React from "react";
+import React,{ useEffect}from "react";
 import {
   Ionicons,
   FontAwesome5,
@@ -14,10 +14,16 @@ import {
 } from "@expo/vector-icons";
 import Goal from "../Goal.js";
 import { connect } from "react-redux";
+import { getAllGoals } from "../../redux/actions/userActions.js";
 import { DrawerActions } from "@react-navigation/native";
 
-const Progress = ({ goals, navigation }) => {
+const Progress = ({ goals, navigation , getAllGoals}) => {
   console.log(goals);
+
+  useEffect(() =>
+  {
+       getAllGoals()
+     },[])
 
   const data = [
     {
@@ -51,20 +57,12 @@ const Progress = ({ goals, navigation }) => {
     <View style={styles.container}>
       <View style={styles.firstContainer}>
         <View style={styles.headContainer}>
-          <View>
-            <Text style={{ fontFamily: "inconsolata", fontSize: 16 }}>
-              $Gaamy
-            </Text>
-            <Text style={{ fontFamily: "inconsolata", fontSize: 16 }}>
-              Personal Account
-            </Text>
-          </View>
-          <View
+            <View
             style={{
               backgroundColor: "#FFBD01",
               width: 100,
               height: 30,
-              borderRadius: 15,
+              borderRadius: 10,
               justifyContent: "center",
               alignItems: "center",
             }}
@@ -75,6 +73,20 @@ const Progress = ({ goals, navigation }) => {
               </Text>
             </TouchableOpacity>
           </View>
+            <View
+            style={{
+              backgroundColor: "#14A5A1",
+              width: 120,
+              height: 30,
+              borderRadius: 10,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+          <TouchableOpacity onPress={() => navigation.navigate("achieved")}>
+            <Text style={{color:"#000"}}>Goal Achieved</Text>
+          </TouchableOpacity>
+        </View>
           <TouchableOpacity
             onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
           >
@@ -82,24 +94,10 @@ const Progress = ({ goals, navigation }) => {
           </TouchableOpacity>
         </View>
       </View>
-      <View style={styles.secondContainer}>
-        <Text style={{ flex: 0.3 }}>Your goals</Text>
-        <View
-          style={{
-            flex: 0.3,
-            flexDirection: "row",
-            justifyContent: "space-around",
-          }}
-        >
-          <Text>All</Text>
-          <TouchableOpacity onPress={() => navigation.navigate("achieved")}>
-            <Text>Achieved</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+      
       <View style={styles.thirdContainer}>
         <FlatList
-          data={data}
+          data={goals}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => <Goal item={item} />}
         />
@@ -112,14 +110,18 @@ const mapStateToProps = (state) => {
   return {
     goals: state.goals.goals,
   };
-};
+}
 
-export default connect(mapStateToProps)(Progress);
+const mapDispatchToProps = {
+  getAllGoals
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Progress);
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#cfeef7",
+    backgroundColor: "#069A8E",
   },
   firstContainer: {
     flex: 0.2,
