@@ -4,10 +4,23 @@ import * as Progress from 'react-native-progress';
 
 const Goal = ({ item }) =>
 {
-    const {id,icon,itemName,monthLeft,startPrice,endPrice} = item
+    const { id, icon, name, targetAmount, selectedReminder,amountForContribution, monthLeft, startPrice, endPrice } = item
+  
+    let contribution;
+    if (selectedReminder === 'mth')
+    {
+        contribution = (amountForContribution * 30) / targetAmount
+        console.log(contribution)
+    } else if (selectedReminder === 'wk')
+    {
+        contribution = ( amountForContribution * 7) / targetAmount
+    } else
+    {
+        contribution = amountForContribution /targetAmount
+    }
   return (
-    <View style={styles.container}>
-        <View key={id} style={{flex:1,backgroundColor:"#14A5A1",borderRadius:20}}>
+    <View key={id} style={styles.container}>
+        <View style={{flex:1,backgroundColor:"#2dbdba",borderRadius:20}}>
               <View style={{flex:1,flexDirection:"row",justifyContent:"space-between",height:100}}>    
             <View style={{flex:0.3,alignItems:"center",justifyContent:"center"}}>
                  <View style={{backgroundColor:"grey",width:60,height:60,borderRadius:15,alignItems:"center",justifyContent:"center"}}>
@@ -15,19 +28,19 @@ const Goal = ({ item }) =>
             </View> 
             </View>
             <View style={{flex:0.7,alignItems:"flex-start",justifyContent:"center"}}>
-                <Text>{itemName}</Text>
+                <Text>{name}</Text>
                 <Text>{monthLeft}</Text>
             </View> 
          </View>
          <View style={{flex:1,paddingLeft:30,height:50}}>
             
         <View style={{backgroundColor:"#203239",width:"100%",height:"15%",borderRadius:7,justifyContent:"center"}}>
-                      <Progress.Bar progress={0.8} width={200} />
+                      <Progress.Bar progress={amountForContribution/100} width={200} />
                       {/* <View style={{backgroundColor:"#E6D5B8",width:"60%",height:"20%",borderRadius:5}}></View> */}
              </View>
              <View style={{flex:1,flexDirection:"row",justifyContent:"space-between",alignItems:"center"}}>
-                      <Text>{`$${startPrice}`}</Text>
-                      <Text>{`$${endPrice}`}</Text>
+                      <Text>{`$${targetAmount}`}</Text>
+                      <Text>{`$${amountForContribution/ targetAmount}`}</Text>
              </View>
              
          </View>
