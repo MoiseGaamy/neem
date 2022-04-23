@@ -8,80 +8,95 @@ import {
   TextInput,
   useWindowDimensions,
   KeyboardAvoidingView,
+  SafeAreaView,
+  ScrollView,
+  FlatList
 } from "react-native";
 import React, { useState, useRef } from "react";
-import { EvilIcons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { EvilIcons, MaterialCommunityIcons,Ionicons,MaterialIcons,Foundation} from "@expo/vector-icons";
 import Slider from "@react-native-community/slider";
-import DateTimePicker from "@react-native-community/datetimepicker";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Picker } from "@react-native-picker/picker";
 import { connect } from "react-redux";
 import { addGoal } from "../../redux/actions/userActions.js";
+import moment from "moment";
 
 const Plan = ({ addGoal, navigation }) => {
   //  const widowWith = useWindowDimensions().height
   //   const padding = widowWith
-  const [date, setDate] = useState(new Date());
-  const [mode, setMode] = useState("date");
-  const [show, setShow] = useState(false);
-  const [amount, setAmount] = useState(0);
-  const [cont, setCont] = useState(20);
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [date, setDate] = useState(moment().format("DD-MMM-yyyy"));
   const [name, setName] = useState("");
+  const [targetAmount, setTargetAmount] = useState(0);
+  const [amountForContribution, setAmountForContribution] = useState(20);
 
-  const [selectedLanguage, setSelectedLanguage] = useState();
-  const [selectedName, setSelectedName] = useState();
-
-  const onChange = (event, selectedDate) => {
+  const [selectedReminder, setSelectedReminder] = useState();
+ 
+   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate;
-    setShow(false);
     setDate(currentDate);
   };
 
-  const showMode = (currentMode) => {
-    setShow(true);
-    setMode(currentMode);
+  const showDatePicker = () => {
+    setDatePickerVisibility(true);
   };
 
-  const showDatepicker = () => {
-    showMode("date");
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
   };
 
-  let months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
+  const handleConfirm = (dat) => {
+    console.warn("A date has been picked: ", dat);
+    hideDatePicker();
+  };
+  const Data = [
+    {
+      id: 1, name: 'trip',
+      icon:<MaterialCommunityIcons name='airplane' size={24} color='#A1E3D8'/>,
+    },
+    {
+      id: 2, name: 'Debt',
+      icon:<MaterialIcons name='attach-money' size={24} color='#A1E3D8' />,
+    },
+    {
+      id: 3, name: 'Laptop',
+     icon:<Foundation name='laptop' size={24} color='#A1E3D8' />,
+    },
+    {
+      id: 4, name: 'Rent',
+      icon:<MaterialIcons name='house' size={24} color='#A1E3D8' />,
+    },
+    {
+      id: 5, name: 'Mariage',
+     icon:<Ionicons name='people-outline' size={24} color='#A1E3D8' />,
+    },
+    {
+      id: 6, name: 'Other',
+     icon:<EvilIcons name='question' size={24} color='#A1E3D8' />,
+    },
+  ]
   //  let exactMonth = months[date.getMonth()]
   const handleSubmit = () => {
-    if (!amount && !cont && !date) {
+    if (!targetAmount && !amountForContribution && !date) {
       Alert.alert("the fields are not to be empty.");
     } else {
       const goal = {
         name,
-        selectedName,
-        amount,
-        cont,
+        targetAmount,
+        amountForContribution,
         date,
-        selectedLanguage,
+        selectedReminder,
       };
       // console.log(goal)
       addGoal(goal);
-      navigation.navigate("progress");
+      Alert.alert("Goal created Successfully");
+      navigation.navigate("home");
     }
     setName("");
-    setAmount("");
-    setCont("");
+    setTargetAmount("");
+    setAmountForContribution("");
     setDate("");
-    setSelectedLanguage("");
-    setSelectedName("");
+    setSelectedReminder("");
   };
 
   return (
@@ -89,200 +104,85 @@ const Plan = ({ addGoal, navigation }) => {
     //   behavior={`${padding}`}
     //   style={{ flex: 1, minHeight: widowWith }}
     // >
-    <View style={styles.container}>
-      <View style={styles.firstContainer}>
-        <Text style={{ fontSize: 22, fontFamily: "inconsolata" }}>
-          Let's Create Your
-        </Text>
-        <Text
-          style={{ fontSize: 22, lineHeight: 40, fontFamily: "inconsolata" }}
-        >
-          {" "}
-          Saving Goal!
-        </Text>
-      </View>
-      <View style={styles.secondContainer}>
-        <View
-          style={{
-            paddingHorizontal: 50,
-            flex: 0.7,
-            justifyContent: "space-around",
-          }}
-        >
-          <View style={{ width: 320, height: 50 }}>
-            <Text style={{ fontSize: 18, fontFamily: "inconsolata" }}>
-              Goal Name
-            </Text>
-            <TouchableOpacity
-              style={{
-                height: 35,
-                borderRadius: 30,
-                backgroundColor: "#31efea",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <TextInput
-                value={name}
-                style={{ color: "#000" }}
-                onChangeText={(text) => setName(text)}
-                placeholder="goal name"
-              />
-            </TouchableOpacity>
+    <SafeAreaView style={styles.container}>
+      <View  style={styles.fstContainer}>
+        {/* <View style={{flexDirection:"row",justifyContent:"space-around",alignItems:"center"}}> */}
+          {/* <Text style={{fontSize:30, fontWeight: "bold", color: "#092235"}}>Goal Name</Text> */}
+           {/* <TouchableOpacity> */}
+          {/* <TextInput  style={{ paddingVertical: 16, borderRadius: 10,justifyContent:"center",alignItems:"center"}} placeholder="Enter a goal name"/> */}
+          {/* </TouchableOpacity> */}
+        {/* </View > */}
+        {/* <View>
+           <Text style={{fontSize:30, fontWeight: "bold", color: "#6FDFDF"}}>Select Purpose</Text>
+          <FlatList horizontal showsHorizontalScrollIndicator={false} data={Data} keyExtractor={(item) => item.id} renderItem={({ item }) => (<View style={{height:100,width:100,backgroundColor:"red",marginHorizontal:2,borderRadius:10}}><Text>{item.name}</Text></View> )}/>
+        </View> */}
+        <View style={[styles.subContainer, {flex: 1}]}>
+          <Text style={{fontSize:30, fontWeight: "bold", color: "#092235"}}>Create a goal</Text>
+        </View>
+        <View style={[styles.subContainer, { flex: 2 }]}>
+          <Text style={{color: "#092235", fontWeight: "bold", fontSize: 15}}>Goal name</Text>
+          <TextInput value={name} onChangeText={(text)=> setName(text)}  style={{ paddingVertical: 16, borderRadius: 10,justifyContent:"center",alignItems:"center"}} placeholder="Enter a goal name" placeholderTextColor="#A1E3D8"/>
+        </View>
+        <View style={[styles.subContainer, { flex: 3 }]}>
+          <Text style={{marginBottom: 4, color: "#092235", fontWeight: "bold", fontSize: 15}}>Purpose</Text>
+          <FlatList horizontal showsHorizontalScrollIndicator={false} data={Data} keyExtractor={(item) => item.id} renderItem={({ item }) => (<TouchableOpacity  style={{ height: 100, width: 100, backgroundColor: "#007976", marginHorizontal: 2, borderRadius: 10,alignItems:"center",justifyContent:"center" }}><Text style={{color:"#A1E3D8"}}>{item.name}</Text>{item.icon}</TouchableOpacity> )}/>
+        </View>
+        <View style={[styles.subContainer, { flex: 2, flexDirection: "row" }]}>
+          <View style={{flex: 1}}>
+            <Text style={{color: "#092235", fontWeight: "bold", fontSize: 15}}>Target amount</Text>
+            <TextInput value={targetAmount} onChangeText={(target)=>setTargetAmount(target)} placeholder="000 Ghs" placeholderTextColor="#A1E3D8"/>
           </View>
-          <View>
-            <Text
-              style={{
-                fontSize: 18,
-                fontFamily: "inconsolata",
-                marginTop: 20,
-              }}
-            >
-              Goal Target
-            </Text>
+
+          <View style={{flex: 1}}>
+            <Text style={{color: "#092235", fontWeight: "bold", fontSize: 15}}>Amount to contribute</Text>
+            <TextInput value={amountForContribution} onChangeText={(contribute)=>setAmountForContribution(contribute)} placeholder="000 Ghs" placeholderTextColor="#A1E3D8" />
+          </View>
+        </View>
+        <View style={[styles.subContainer, { flex: 1.5 }]}>
+          <Text style={{color: "#092235", fontWeight: "bold", fontSize: 15}}>Set a reminder date</Text>   
             <Picker
-              style={{ color: "#14A5A1" }}
-              selectedValue={selectedName}
+              style={{ color: "#A1E3D8" }}
+              selectedValue={selectedReminder}
               onValueChange={(itemValue, itemIndex) =>
-                setSelectedName(itemValue)
-              }
-            >
-              <Picker.Item
-                label="Trip"
-                value="https://images.unsplash.com/photo-1512289984044-071903207f5e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"
-              />
-              <Picker.Item
-                label="Debt"
-                value="https://images.unsplash.com/photo-1634128222187-18eababc763d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
-              />
-              <Picker.Item
-                label="Rental"
-                value="https://images.unsplash.com/photo-1490197415175-074fd86b1fcc?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=874&q=80"
-              />
-            </Picker>
-          </View>
-          <View style={{ justifyContent: "space-evenly", flex: 0.5 }}>
-            <Text style={{ fontSize: 18, fontFamily: "inconsolata" }}>
-              Amount to Save
-            </Text>
-            <Text style={{ fontSize: 22, fontFamily: "robo" }}>
-              {Math.floor(amount)} Ghs
-            </Text>
-            <Slider
-              style={{ width: 500, height: 40 }}
-              minimumValue={0}
-              maximumValue={800.0}
-              onValueChange={(value) => setAmount(Math.floor(value))}
-              minimumTrackTintColor="#092235"
-              maximumTrackTintColor="#000000"
-            />
-          </View>
-          <View style={{ justifyContent: "space-evenly", flex: 0.5 }}>
-            <Text style={{ fontSize: 18, fontFamily: "inconsolata" }}>
-              Contribution
-            </Text>
-            <Text style={{ fontSize: 22, fontFamily: "robo" }}>
-              {Math.floor(cont)} Ghs
-            </Text>
-            <Slider
-              style={{ width: 500, height: 40 }}
-              minimumValue={0}
-              maximumValue={800.0}
-              onValueChange={(value) => setCont(Math.floor(value))}
-              minimumTrackTintColor="#092235"
-              maximumTrackTintColor="#000000"
-            />
-          </View>
-          <View>
-            <Text style={{ fontSize: 18, fontFamily: "inconsolata" }}>
-              set Reminder
-            </Text>
-            <Picker
-              style={{ color: "#14A5A1" }}
-              selectedValue={selectedLanguage}
-              onValueChange={(itemValue, itemIndex) =>
-                setSelectedLanguage(itemValue)
+                setSelectedReminder(itemValue)
               }
             >
               <Picker.Item label="day" value="day" />
               <Picker.Item label="week" value="wk" />
               <Picker.Item label="month" value="mth" />
             </Picker>
-          </View>
-          <View style={{ justifyContent: "space-evenly", flex: 0.3 }}>
-            <Text style={{ fontSize: 18, fontFamily: "inconsolata" }}>
-              Target Date
-            </Text>
-            <TouchableOpacity
-              style={{
-                backgroundColor: "#31efea",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-              onPress={showDatepicker}
-            >
-              <Text
-                style={{
-                  fontFamily: "inconsolata",
-                  color: "#999999",
-                  fontSize: 18,
-                }}
-              >
-                Click to Show date picker!
-              </Text>
-            </TouchableOpacity>
-            <Text style={{ fontFamily: "robo", fontSize: 17 }}></Text>
-            {show && (
-              <DateTimePicker
-                testID="dateTimePicker"
-                value={date}
-                mode={mode}
-                is24Hour={true}
-                onChange={onChange}
-              />
-            )}
-          </View>
+          
         </View>
-        <View style={styles.thirdContainer}>
-          <View
-            style={{
-              flex: 0.5,
-              justifyContent: "space-evenly",
-              alignItems: "center",
-            }}
-          >
-            <Text
-              style={{
-                color: "#fff",
-                fontSize: 17,
-                fontFamily: "inconsolata",
-              }}
-            >
-              {" "}
-              You will Save{" "}
-              <Text style={{ fontSize: 19 }}>{amount}.00 Ghs</Text> by
-            </Text>
-            <Text style={{ fontSize: 30, color: "#fff" }}></Text>
-          </View>
-          <TouchableOpacity
-            onPress={handleSubmit}
-            style={{
-              flex: 0.3,
-              flexDirection: "row",
-              width: 350,
-              height: 50,
-              backgroundColor: "#fff",
-              borderRadius: 20,
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <MaterialCommunityIcons name="plus-thick" size={15} color="black" />
-            <Text style={{ paddingHorizontal: 10 }}>Create a goal</Text>
+
+        <View style={[styles.subContainer, { flex: 1.5 }]}>
+          <TouchableOpacity onPress={showDatePicker}>
+            <Text style={{color: "#092235", fontWeight: "bold", fontSize: 15}}>Set target date</Text>
+            <Text style={{color: "#A1E3D8"}}>{date}</Text>
           </TouchableOpacity>
+        <DateTimePickerModal
+        isVisible={isDatePickerVisible}
+        mode="date"
+        onChange={onChange}
+        onConfirm={handleConfirm}
+        onCancel={hideDatePicker}
+      />
         </View>
-      </View>
-    </View>
+       </View>
+      <View style={styles.scdContainer}>
+        <View >
+         <Text style={{ color: "#A1E3D8", fontSize: 15 }}>You will Save <Text style={{ fontSize: 19 }}>{targetAmount}.00 Ghs</Text> by</Text>
+        <Text style={{lineHeight:40,color: "#A1E3D8"}}>{ date}</Text>
+        </View>
+        <View>
+           <TouchableOpacity onPress={handleSubmit} style={{borderRadius:15,width:150,height:50,backgroundColor:"#fff",flexDirection: "row",alignItems:"center",justifyContent:"center"}}>
+             <MaterialCommunityIcons name="plus-thick" size={15} color="black" />
+            <Text>Create goal</Text>
+        </TouchableOpacity>
+       </View>
+       </View>
+      
+     
+    </SafeAreaView>
     // </KeyboardAvoidingView>
   );
 };
@@ -292,18 +192,18 @@ export default connect(null, { addGoal })(Plan);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#D9DEEB",
+    backgroundColor: "#fff",
   },
   firstContainer: {
-    flex: 0.2,
+    flex: 0.1,
     justifyContent: "center",
     paddingHorizontal: 50,
   },
   secondContainer: {
-    flex: 0.8,
+    flex: 0.9,
     backgroundColor: "#F4F6FC",
     borderTopLeftRadius: 80,
-    justifyContent: "center",
+    // justifyContent: "center",
   },
   thirdContainer: {
     flex: 0.3,
@@ -312,6 +212,23 @@ const styles = StyleSheet.create({
     paddingHorizontal: 50,
     justifyContent: "space-evenly",
   },
+  fstContainer: {
+    // backgroundColor: "#efefef",
+    flex: 0.9,
+    paddingHorizontal: 16,
+  },
+  scdContainer: {
+    flex: 0.1,
+   backgroundColor: "#007976",
+    // paddingHorizontal: 16,
+    justifyContent: "space-around",
+    alignItems: "center",
+    flexDirection: "row",
+  },
+  subContainer: {
+    justifyContent: "center"
+    // marginVertical: 8,
+  }
 });
 
 // {exactMonth} {date.getFullYear()}
