@@ -1,12 +1,17 @@
 import { StyleSheet, Text, View,FlatList,Image,TouchableOpacity } from 'react-native'
-import React from 'react';
+import React,{useEffect} from 'react';
 import { Ionicons, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
 import Goal from '../Goal.js';
+import {getAllGoals} from "../../redux/actions/userActions.js"
 import { connect } from 'react-redux';
 
-const Progress = ({goals,navigation}) =>
+const Progress = ({goals,navigation, getAllGoals}) =>
 {
- console.log(goals)
+  console.log(goals)
+  // useEffect(() =>
+  // {
+  //   getAllGoals()
+  // })
   
   const data = [
     {
@@ -66,6 +71,9 @@ const mapStateToProps = (state) =>
     goals:state.goals.goals
   }
 }
+// const mapDispatchToProps = {
+//   getAllGoals
+// }
 
 export default connect(mapStateToProps)(Progress)
 
