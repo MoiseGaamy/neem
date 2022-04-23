@@ -20,19 +20,15 @@ export const getAllGoals = () => {
 			.onSnapshot(
 				(snapshot) => {
 					let allGoals = [];
-					snapshot.forEach((doc) => {
+                    snapshot.forEach((doc) =>
+                    {
+                        console.log(doc.data());
 						allGoals.push(doc.data());
 					});
                     console.log(allGoals); 
                      dispatch({ type: "ALL_GOALS", payload: allGoals }); 
 				},
-            ).then((goal) =>
-            {
-                console.log('it is working',goal)
-            }).catch((error) =>
-            {
-                console.log('something went wrong',error.message)
-            });
+            )
 	};
 };
 
