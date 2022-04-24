@@ -16,9 +16,13 @@ import Goal from "../Goal.js";
 import { connect } from "react-redux";
 import { getAllGoals } from "../../redux/actions/userActions.js";
 import { DrawerActions } from "@react-navigation/native";
+import { PayWithFlutterwave } from "flutterwave-react-native";
 
 const Progress = ({ goals, navigation , getAllGoals}) => {
   console.log(goals);
+  // const [amount] = goals;
+  // console.log(amount)
+  // const { amountForContribution } = amount;
 
   useEffect(() =>
   {
@@ -53,6 +57,32 @@ const Progress = ({ goals, navigation , getAllGoals}) => {
       endPrice: 80000,
     },
   ];
+
+  const transactionReference = (length) => {
+    let arr =
+      "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".split(
+        ""
+      );
+    let mainArr = [];
+    for (let i = 0; i < length; i++) {
+      let ranIndex = (Math.random() * (arr.length - 1)).toFixed(0);
+      mainArr[i] = arr[ranIndex];
+    }
+    return mainArr.join("");
+  };
+  const options = {
+    tx_ref: transactionReference(10),
+    authorization: "FLWPUBK_TEST-a87c7da2424703de6142adba57ded237-X",
+    customer: {
+      email: "flokygamy@gmail.com",
+    },
+    amount: 50,
+    currency: "GHS",
+    payment_options: "mobilemoneyghana",
+  };
+  const handleOnRedirect = (data) => {
+    console.log(data);
+  };
   return (
     <View style={styles.container}>
       <View style={styles.firstContainer}>
@@ -67,11 +97,27 @@ const Progress = ({ goals, navigation , getAllGoals}) => {
               alignItems: "center",
             }}
           >
-            <TouchableOpacity onPress={() => navigation.navigate("Proceed")}>
-              <Text style={{ fontFamily: "inconsolata", fontSize: 17 }}>
-                Payment
-              </Text>
-            </TouchableOpacity>
+            <PayWithFlutterwave
+                onRedirect={(data) => handleOnRedirect(data)}
+                options={options}
+                customButton={(props) => (
+                  <TouchableOpacity
+                    // style={{
+                    //   justifyContent: "center",
+                    //   backgroundColor: "#fff",
+                    //   width: 310,
+                    //   height: 70,
+                    //   borderRadius: 60,
+                    //   alignItems: "center",
+                    // }}
+                    onPress={props.onPress}
+                    isBusy={props.isInitializing}
+                    disabled={props.disabled}
+              >
+                <Text style={{ fontFamily: "inconsolata", fontSize: 17 }}>Payment</Text>
+              </TouchableOpacity>
+            )}
+          />
           </View>
             <View
             style={{
