@@ -5,6 +5,7 @@ import * as Notifications from 'expo-notifications';
 import { Paystack, paystackProps } from 'react-native-paystack-webview';
 import StripeApp from './stripe/StripeApp.js';
 import { StripeProvider } from '@stripe/stripe-react-native';
+import { PayWithFlutterwave } from "flutterwave-react-native";
 
 
 Notifications.setNotificationHandler({
