@@ -3,13 +3,14 @@ import { fireDB } from "../../firebase/config.js";
 export const addGoal = (newGoal) => {
     return (dispatch) =>
     {
-            fireDB
-            .collection("goals")
-            .add(newGoal)
-            .then((goal) => {console.log('this is it', goal)})
-            .catch((error)=>{
-                console.log(error.message)
-            });
+        console.log("jfjfjfjfjfj", newGoal);
+            // fireDB
+            // .collection("goals")
+            // .add(newGoal)
+            // .then((goal) => {console.log('this is it', goal)})
+            // .catch((error)=>{
+            //     console.log(error.message)
+            // });
     }
 };
 
