@@ -58,7 +58,7 @@ import  Modal  from '../screens/Modal.js';
           </>}
           </Stack.Navigator>
       </NavigationContainer>
-   
+    
   );
 }
 
