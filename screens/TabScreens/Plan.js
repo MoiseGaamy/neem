@@ -27,15 +27,22 @@ const Plan = ({ addGoal, navigation }) => {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [date, setDate] = useState(moment().format("DD-MMM-yyyy"));
   const [name, setName] = useState("");
+  const [purpose,setPerpose] = useState([{
+      id: 1, name: 'trip',
+      icon: <MaterialCommunityIcons name='airplane' size={24} color='#A1E3D8' />,
+      iconType: "MaterialCommunityIcons",
+      iconName: "airplane"
+    }])
   const [targetAmount, setTargetAmount] = useState(0);
   const [amountForContribution, setAmountForContribution] = useState(20);
 
   const [selectedReminder, setSelectedReminder] = useState();
  
-   const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate;
-    setDate(currentDate);
-  };
+  //  const onChange = (event, selectedDate) => {
+  //   const currentDate = selectedDate;
+  //    setDate(moment(currentDate).format("DD-MMM-yyyy"));
+  //    console.log(moment(currentDate).format("DD-MMM-yyyy"));
+  // };
 
   const showDatePicker = () => {
     setDatePickerVisibility(true);
@@ -45,34 +52,47 @@ const Plan = ({ addGoal, navigation }) => {
     setDatePickerVisibility(false);
   };
 
-  const handleConfirm = (dat) => {
-    console.warn("A date has been picked: ", dat);
+  const handleConfirm = (date) =>
+  {
+    setDate(moment(date).format("DD-MMM-yyyy"));
     hideDatePicker();
   };
   const Data = [
     {
       id: 1, name: 'trip',
-      icon:<MaterialCommunityIcons name='airplane' size={24} color='#A1E3D8'/>,
+      icon: <MaterialCommunityIcons name='airplane' size={24} color='#A1E3D8' />,
+      iconType: "MaterialCommunityIcons",
+      iconName:  'airplane'
     },
     {
       id: 2, name: 'Debt',
-      icon:<MaterialIcons name='attach-money' size={24} color='#A1E3D8' />,
+      icon: <MaterialIcons name='attach-money' size={24} color='#A1E3D8' />,
+      iconType: "MaterialIcons",
+       iconName:  'attach-money'
     },
     {
       id: 3, name: 'Laptop',
-     icon:<Foundation name='laptop' size={24} color='#A1E3D8' />,
+      icon: <Foundation name='laptop' size={24} color='#A1E3D8' />,
+      iconType: "Foundation",
+      iconName:  'laptop'
     },
     {
       id: 4, name: 'Rent',
-      icon:<MaterialIcons name='house' size={24} color='#A1E3D8' />,
+      icon: <MaterialIcons name='house' size={24} color='#A1E3D8' />,
+      iconType: "MaterialIcons",
+      iconName:  'house'
     },
     {
       id: 5, name: 'Mariage',
-     icon:<Ionicons name='people-outline' size={24} color='#A1E3D8' />,
+      icon: <Ionicons name='people-outline' size={24} color='#A1E3D8' />,
+      iconType: "Ionicons",
+      iconName:  'people-outline'
     },
     {
       id: 6, name: 'Other',
-     icon:<EvilIcons name='question' size={24} color='#A1E3D8' />,
+      icon: <EvilIcons name='question' size={24} color='#A1E3D8' />,
+      iconType: "EvilIcons",
+      iconName:"question"
     },
   ]
   //  let exactMonth = months[date.getMonth()]
@@ -86,6 +106,7 @@ const Plan = ({ addGoal, navigation }) => {
         amountForContribution,
         date,
         selectedReminder,
+        purpose
       };
       // console.log(goal)
       addGoal(goal);
@@ -125,7 +146,7 @@ const Plan = ({ addGoal, navigation }) => {
         </View>
         <View style={[styles.subContainer, { flex: 3 }]}>
           <Text style={{marginBottom: 4, color: "#092235", fontWeight: "bold", fontSize: 15}}>Purpose</Text>
-          <FlatList horizontal showsHorizontalScrollIndicator={false} data={Data} keyExtractor={(item) => item.id} renderItem={({ item }) => (<TouchableOpacity  style={{ height: 100, width: 100, backgroundColor: "#007976", marginHorizontal: 2, borderRadius: 10,alignItems:"center",justifyContent:"center" }}><Text style={{color:"#A1E3D8"}}>{item.name}</Text>{item.icon}</TouchableOpacity> )}/>
+          <FlatList horizontal showsHorizontalScrollIndicator={false}  data={Data} keyExtractor={(item) => item.id} onPress={() => setPerpose(item)} renderItem={({ item }) => (<TouchableOpacity  style={{ height: 100, width: 100, backgroundColor: "#007976", marginHorizontal: 2, borderRadius: 10,alignItems:"center",justifyContent:"center" }}><Text style={{color:"#A1E3D8"}}>{item.name}</Text>{item.icon}</TouchableOpacity> )}/>
         </View>
         <View style={[styles.subContainer, { flex: 2, flexDirection: "row" }]}>
           <View style={{flex: 1}}>
@@ -138,7 +159,7 @@ const Plan = ({ addGoal, navigation }) => {
             <TextInput value={amountForContribution} onChangeText={(contribute)=>setAmountForContribution(contribute)} placeholder="000 Ghs" placeholderTextColor="#A1E3D8" />
           </View>
         </View>
-        <View style={[styles.subContainer, { flex: 1.5 }]}>
+        {/* <View style={[styles.subContainer, { flex: 1.5 }]}>
           <Text style={{color: "#092235", fontWeight: "bold", fontSize: 15}}>Set a reminder date</Text>   
             <Picker
               style={{ color: "#A1E3D8" }}
@@ -152,7 +173,7 @@ const Plan = ({ addGoal, navigation }) => {
               <Picker.Item label="month" value="mth" />
             </Picker>
           
-        </View>
+        </View> */}
 
         <View style={[styles.subContainer, { flex: 1.5 }]}>
           <TouchableOpacity onPress={showDatePicker}>
@@ -162,8 +183,9 @@ const Plan = ({ addGoal, navigation }) => {
         <DateTimePickerModal
         isVisible={isDatePickerVisible}
         mode="date"
-        onChange={onChange}
-        onConfirm={handleConfirm}
+        // onChange={onChange}
+            onConfirm={handleConfirm}
+            display
         onCancel={hideDatePicker}
       />
         </View>
