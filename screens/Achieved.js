@@ -3,6 +3,7 @@ import React, { useState} from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
 import GoalAchieved from './GoalAchieved.js';
 import ProceedPayment from './payement/ProceedPayment.js';
+import { PayWithFlutterwave } from "flutterwave-react-native";
 
 const Achieved = ({navigation}) =>
 {
@@ -31,7 +32,31 @@ const Achieved = ({navigation}) =>
             
         // },
     ]
-
+     const transactionReference = (length) => {
+    let arr =
+      "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".split(
+        ""
+      );
+    let mainArr = [];
+    for (let i = 0; i < length; i++) {
+      let ranIndex = (Math.random() * (arr.length - 1)).toFixed(0);
+      mainArr[i] = arr[ranIndex];
+    }
+    return mainArr.join("");
+  };
+  const options = {
+    tx_ref: transactionReference(10),
+    authorization: "FLWPUBK_TEST-a87c7da2424703de6142adba57ded237-X",
+    customer: {
+      email: "flokygamy@gmail.com",
+    },
+    amount: 2000,
+    currency: "GHS",
+    payment_options: "mobilemoneyghana",
+  };
+  const handleOnRedirect = (data) => {
+    console.log(data);
+  };
   return (
       <View style={styles.centeredView}>
             <Modal
@@ -58,7 +83,27 @@ const Achieved = ({navigation}) =>
                 </View>
             </Modal>
             <View style={{flex:1,backgroundColor:"#14A5A1",opacity:0.8}}>
-                <FlatList data={Data} keyExtractor={(item) => item.id} renderItem={({ item }) => (<TouchableOpacity onPress={() => setModalVisible(true)}><GoalAchieved item={item} /></TouchableOpacity>)}/>
+        <FlatList data={Data} keyExtractor={(item) => item.id} renderItem={({ item }) => (
+          <PayWithFlutterwave
+                onRedirect={(data) => handleOnRedirect(data)}
+                options={options} customButton={(props) => (
+                  <TouchableOpacity
+                    // style={{
+                    //   justifyContent: "center",
+                    //   backgroundColor: "#fff",
+                    //   width: 310,
+                    //   height: 70,
+                    //   borderRadius: 60,
+                    //   alignItems: "center",
+                    // }}
+                    onPress={props.onPress}
+                    isBusy={props.isInitializing}
+                    disabled={props.disabled}
+              >
+                <GoalAchieved item={item} />
+              </TouchableOpacity>
+            )} /> )}
+          />
           </View>
       </View>
   )
@@ -112,3 +157,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 })
+
+
+
+ 
+               
+              
+              
+           
