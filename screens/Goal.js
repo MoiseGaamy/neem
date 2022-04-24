@@ -7,17 +7,21 @@ const Goal = ({ item }) =>
     const { id, icon, name, targetAmount, selectedReminder,amountForContribution, monthLeft, startPrice, endPrice } = item
   
     let contribution;
+    let target = Number(targetAmount);
+    let contribu = Number(amountForContribution);
     if (selectedReminder === 'mth')
     {
-        contribution = (amountForContribution * 30) / targetAmount
+        contribution = (contribu * 30) / target
         console.log(contribution)
     } else if (selectedReminder === 'wk')
     {
-        contribution = ( amountForContribution * 7) / targetAmount
+        contribution = ( contribu * 7) / target
     } else
     {
-        contribution = amountForContribution /targetAmount
+        contribution = contribu /target
     }
+
+   
   return (
     <View key={id} style={styles.container}>
         <View style={{flex:1,backgroundColor:"#2dbdba",borderRadius:20}}>
@@ -35,12 +39,12 @@ const Goal = ({ item }) =>
          <View style={{flex:1,paddingLeft:30,height:50}}>
             
         <View style={{backgroundColor:"#203239",width:"100%",height:"15%",borderRadius:7,justifyContent:"center"}}>
-                      <Progress.Bar progress={amountForContribution/100} width={200} />
+                      <Progress.Bar progress={contribu} width={200} />
                       {/* <View style={{backgroundColor:"#E6D5B8",width:"60%",height:"20%",borderRadius:5}}></View> */}
              </View>
              <View style={{flex:1,flexDirection:"row",justifyContent:"space-between",alignItems:"center"}}>
-                      <Text>{`$${targetAmount}`}</Text>
-                      <Text>{`$${amountForContribution/ targetAmount}`}</Text>
+                      <Text>{targetAmount}</Text>
+                      <Text>{amountForContribution}</Text>
              </View>
              
          </View>
