@@ -144,7 +144,7 @@ const Progress = ({ goals, navigation , getAllGoals}) => {
       <View style={styles.thirdContainer}>
         <FlatList
           data={goals}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item._id}
           renderItem={({ item }) => <Goal item={item} />}
         />
       </View>
