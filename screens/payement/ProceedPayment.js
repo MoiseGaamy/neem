@@ -1,33 +1,17 @@
 import { StyleSheet,Button, Text, View,useWindowDimensions,KeyboardAvoidingView } from 'react-native'
 import React,{useRef, useState} from 'react'
 import { TextInput, TouchableOpacity } from 'react-native'
-import * as Notifications from 'expo-notifications';
 import { Paystack, paystackProps } from 'react-native-paystack-webview';
 import StripeApp from './stripe/StripeApp.js';
 import { StripeProvider } from '@stripe/stripe-react-native';
 import { PayWithFlutterwave } from "flutterwave-react-native";
 
 
-Notifications.setNotificationHandler({
-    handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: false,
-  }),
-    });
+
 
 const ProceedPayment = ({navigation}) =>
 {
-    const handleNotification = () =>
-    {
-    Notifications.scheduleNotificationAsync({
-    content: {
-      title: "hi 😎there",
-      body: 'it is time for your payment',
-    },
-    trigger: { seconds: 5 },
-  });
-}
+   
 
      const widowWith = useWindowDimensions().height
     const padding = widowWith
