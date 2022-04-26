@@ -16,10 +16,11 @@ import React, { useState, useRef } from "react";
 import { EvilIcons, MaterialCommunityIcons,Ionicons,MaterialIcons,Foundation} from "@expo/vector-icons";
 import Slider from "@react-native-community/slider";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { Picker } from "@react-native-picker/picker";
+import { Picker as DataPicker } from "@react-native-picker/picker";
 import { connect } from "react-redux";
 import { addGoal } from "../../redux/actions/userActions.js";
 import moment from "moment";
+import { Picker } from 'react-native-woodpicker'
 
 const Plan = ({ addGoal, navigation }) => {
   //  const widowWith = useWindowDimensions().height
@@ -27,22 +28,28 @@ const Plan = ({ addGoal, navigation }) => {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [date, setDate] = useState(moment().format("DD-MMM-yyyy"));
   const [name, setName] = useState("");
-  const [purpose,setPerpose] = useState([{
+  const [purpose,setPurpose] = useState({
       id: 1, name: 'trip',
-      icon: <MaterialCommunityIcons name='airplane' size={24} color='#A1E3D8' />,
       iconType: "MaterialCommunityIcons",
       iconName: "airplane"
-    }])
+    })
   const [targetAmount, setTargetAmount] = useState(0);
   const [amountForContribution, setAmountForContribution] = useState(20);
 
-  const [selectedReminder, setSelectedReminder] = useState();
+  const [selectedReminder, setSelectedReminder] = useState({ label: "day", value: 1 });
+  // const [pickedData, setPickedData] = useState();
+
+  const data = [
+    { label: "day", value: 1 },
+    { label: "month", value: 2 },
+    { label: "week", value: 3 },
+  ];
  
-  //  const onChange = (event, selectedDate) => {
-  //   const currentDate = selectedDate;
-  //    setDate(moment(currentDate).format("DD-MMM-yyyy"));
-  //    console.log(moment(currentDate).format("DD-MMM-yyyy"));
-  // };
+   const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate;
+     setDate(moment(currentDate).format("DD-MMM-yyyy"));
+     console.log(moment(currentDate).format("DD-MMM-yyyy"));
+  };
 
   const showDatePicker = () => {
     setDatePickerVisibility(true);
@@ -52,9 +59,9 @@ const Plan = ({ addGoal, navigation }) => {
     setDatePickerVisibility(false);
   };
 
-  const handleConfirm = (date) =>
+  const handleConfirm = (dat) =>
   {
-    setDate(moment(date).format("DD-MMM-yyyy"));
+    setDate(moment(dat).format("DD-MMM-yyyy"))
     hideDatePicker();
   };
   const Data = [
@@ -142,38 +149,39 @@ const Plan = ({ addGoal, navigation }) => {
         </View>
         <View style={[styles.subContainer, { flex: 2 }]}>
           <Text style={{color: "#092235", fontWeight: "bold", fontSize: 15}}>Goal name</Text>
-          <TextInput value={name} onChangeText={(text)=> setName(text)}  style={{ paddingVertical: 16, borderRadius: 10,justifyContent:"center",alignItems:"center"}} placeholder="Enter a goal name" placeholderTextColor="#A1E3D8"/>
+          <TextInput value={name} onChangeText={(text)=> setName(text)}  style={{ fontSize: 30, fontWeight: "bold", paddingVertical: 16, borderRadius: 10,justifyContent:"center",alignItems:"center"}} placeholder="Enter a goal name" placeholderTextColor="#A1E3D8"/>
         </View>
         <View style={[styles.subContainer, { flex: 3 }]}>
           <Text style={{marginBottom: 4, color: "#092235", fontWeight: "bold", fontSize: 15}}>Purpose</Text>
-          <FlatList horizontal showsHorizontalScrollIndicator={false}  data={Data} keyExtractor={(item) => item.id} onPress={() => setPerpose(item)} renderItem={({ item }) => (<TouchableOpacity  style={{ height: 100, width: 100, backgroundColor: "#007976", marginHorizontal: 2, borderRadius: 10,alignItems:"center",justifyContent:"center" }}><Text style={{color:"#A1E3D8"}}>{item.name}</Text>{item.icon}</TouchableOpacity> )}/>
+          <FlatList horizontal showsHorizontalScrollIndicator={false}  data={Data} keyExtractor={(item) => item.id}  renderItem={({ item }) => <Item item={item} setPurpose={setPurpose} />}/>
         </View>
         <View style={[styles.subContainer, { flex: 2, flexDirection: "row" }]}>
           <View style={{flex: 1}}>
             <Text style={{color: "#092235", fontWeight: "bold", fontSize: 15}}>Target amount</Text>
-            <TextInput value={targetAmount} onChangeText={(target)=>setTargetAmount(target)} placeholder="000 Ghs" placeholderTextColor="#A1E3D8"/>
+            <TextInput keyboardType="number-pad" value={targetAmount} style={{fontSize: 30, fontWeight: "bold"}} onChangeText={(target)=>setTargetAmount(target)} placeholder="000 Ghs" placeholderTextColor="#A1E3D8"/>
           </View>
 
           <View style={{flex: 1}}>
             <Text style={{color: "#092235", fontWeight: "bold", fontSize: 15}}>Amount to contribute</Text>
-            <TextInput value={amountForContribution} onChangeText={(contribute)=>setAmountForContribution(contribute)} placeholder="000 Ghs" placeholderTextColor="#A1E3D8" />
+            <TextInput keyboardType="number-pad" style={{fontSize: 30, fontWeight: "bold"}} value={amountForContribution} onChangeText={(contribute)=>setAmountForContribution(contribute)} placeholder="000 Ghs" placeholderTextColor="#A1E3D8" />
           </View>
         </View>
-        {/* <View style={[styles.subContainer, { flex: 1.5 }]}>
+        <View style={[styles.subContainer, { flex: 1.5 }]}>
           <Text style={{color: "#092235", fontWeight: "bold", fontSize: 15}}>Set a reminder date</Text>   
-            <Picker
-              style={{ color: "#A1E3D8" }}
-              selectedValue={selectedReminder}
-              onValueChange={(itemValue, itemIndex) =>
-                setSelectedReminder(itemValue)
-              }
-            >
-              <Picker.Item label="day" value="day" />
-              <Picker.Item label="week" value="wk" />
-              <Picker.Item label="month" value="mth" />
-            </Picker>
-          
-        </View> */}
+            
+           <Picker
+        item={selectedReminder}
+        items={data}
+        onItemChange={setSelectedReminder}
+        title="Data Picker"
+        placeholder="Select Data"
+        isNullable={false}
+      //backdropAnimation={{ opacity: 0 }}
+      //mode="dropdown"
+      //isNullable
+      //disable
+    />
+        </View>
 
         <View style={[styles.subContainer, { flex: 1.5 }]}>
           <TouchableOpacity onPress={showDatePicker}>
@@ -183,9 +191,8 @@ const Plan = ({ addGoal, navigation }) => {
         <DateTimePickerModal
         isVisible={isDatePickerVisible}
         mode="date"
-        // onChange={onChange}
-            onConfirm={handleConfirm}
-            display
+        onChange={onChange}
+        onConfirm={handleConfirm}
         onCancel={hideDatePicker}
       />
         </View>
@@ -208,6 +215,18 @@ const Plan = ({ addGoal, navigation }) => {
     // </KeyboardAvoidingView>
   );
 };
+
+const Item = ({ item, setPurpose }) =>
+{
+  const [selected, setSelected] = useState(false)
+  return <TouchableOpacity onPress={() =>
+  {
+    setSelected(!selected)
+    let purpose = item
+    delete purpose['icon']
+    setPurpose(purpose)
+  }} style={{ height: 100, width: 100, backgroundColor: selected ? "#3fafa6" : "#007976", marginHorizontal: 2, borderRadius: 10,alignItems:"center",justifyContent:"center" }}><Text style={{color:"#A1E3D8"}}>{item.name}</Text>{item.icon}</TouchableOpacity>
+}
 
 export default connect(null, { addGoal })(Plan);
 
